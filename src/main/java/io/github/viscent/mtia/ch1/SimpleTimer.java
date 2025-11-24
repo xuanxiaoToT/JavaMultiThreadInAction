@@ -13,7 +13,8 @@ http://www.broadview.com.cn/31065
 package io.github.viscent.mtia.ch1;
 
 /**
- * @author 80296347
+ * @author XuanXiao
+ * 简易的倒计时器
  */
 public class SimpleTimer {
     private static int count;

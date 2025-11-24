@@ -21,7 +21,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
- * @author 80296347
+ * @author XuanXiao
+ * <p>
+ * Web 应用中的 Servlet 类 的 doGet 、 doPost 等方法也总是由确定的线程负责执行的（具
+ * 体与所使用的 Web 容器有关）
  */
 @WebServlet("/echo")
 public class EchoServlet extends HttpServlet {

@@ -3,7 +3,7 @@ package io.github.viscent.mtia.ch1;
 import io.github.viscent.mtia.util.Tools;
 
 /**
- * @author 80296347/高登峰
+ * @author XuanXiao
  * @CreateDate 2022/11/30
  * <p>
  * 线程的两种创建方式的区别
@@ -20,15 +20,15 @@ public class ThreadCreationCmp {
         for (int i = 0; i < 2 * numberOfProceesors; i++) {
             // 直接创建线程
             // 注意：ct是共用的，这意味着内部的count也是共用的。
-            // t = new Thread(ct);
-            t = new Thread(new CountingTask());
+             t = new Thread(ct);
+//            t = new Thread(new CountingTask());
             t.start();
         }
-        // for (int i = 0; i < 2 * numberOfProceesors; i++) {
-        //     // 以子类的方式创建线程
-        //     t = new CountingThread();
-        //     t.start();
-        // }
+//         for (int i = 0; i < 2 * numberOfProceesors; i++) {
+//             // 以子类的方式创建线程
+//             t = new CountingThread();
+//             t.start();
+//         }
     }
 
     static class Counter {

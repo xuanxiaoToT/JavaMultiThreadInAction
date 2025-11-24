@@ -15,7 +15,7 @@ package io.github.viscent.mtia.ch3.case01;
 import io.github.viscent.mtia.util.Tools;
 
 /**
- * @author 80296347
+ * @author XuanXiao
  */
 public class CaseRunner3_1 {
 

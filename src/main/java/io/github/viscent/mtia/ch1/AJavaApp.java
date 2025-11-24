@@ -15,7 +15,7 @@ package io.github.viscent.mtia.ch1;
 import java.util.Date;
 
 /**
- * @author 80296347
+ * @author XuanXiao
  */
 public class AJavaApp {
 

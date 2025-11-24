@@ -18,6 +18,8 @@ public class WelcomeApp {
         // 创建线程
         Thread welcomeThread = new WelcomeThread();
 
+        Thread.State state = welcomeThread.getState();
+
         // 启动线程
         welcomeThread.start();
 

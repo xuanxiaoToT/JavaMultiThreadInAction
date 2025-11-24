@@ -2,3 +2,4 @@
 /WebContent/WEB-INF/classes
 .idea/*
 target/*
+/tmp/

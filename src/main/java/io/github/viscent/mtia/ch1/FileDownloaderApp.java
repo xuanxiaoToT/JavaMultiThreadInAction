@@ -23,9 +23,12 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
- * @author 80296347
+ * @author XuanXiao
+ * 使用多线程下载文件
  */
 public class FileDownloaderApp {
 
@@ -57,8 +60,7 @@ public class FileDownloaderApp {
                         + "/viscent-"
                         + fileBaseName;
                 Debug.info("Saving to: " + localFileName);
-                downloadFile(url, new FileOutputStream(
-                        localFileName), 1024);
+                downloadFile(url, Files.newOutputStream(Paths.get(localFileName)), 1024);
             } catch (Exception e) {
                 e.printStackTrace();
             }

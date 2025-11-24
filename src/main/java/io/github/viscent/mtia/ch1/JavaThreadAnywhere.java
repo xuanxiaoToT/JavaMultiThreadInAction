@@ -12,6 +12,7 @@ http://www.broadview.com.cn/31065
 */
 package io.github.viscent.mtia.ch1;
 
+
 public class JavaThreadAnywhere {
 
     /**
