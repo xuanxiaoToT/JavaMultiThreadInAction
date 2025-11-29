@@ -14,38 +14,45 @@ package io.github.viscent.mtia.ch3;
 
 import io.github.viscent.mtia.util.Debug;
 
+/**
+ * 清单 3-18
+ * 基于静态内部类的单例模式实现
+ */
 public class StaticHolderSingleton {
-  // 私有构造器
-  private StaticHolderSingleton() {
-    Debug.info("StaticHolderSingleton inited.");
-  }
-
-  static class InstanceHolder {
-    // 保存外部类的唯一实例
-    static {
-      Debug.info("InstanceHolder inited.");
+    // 私有构造器
+    private StaticHolderSingleton() {
+        Debug.info("StaticHolderSingleton inited.");
     }
-    final static StaticHolderSingleton INSTANCE = new StaticHolderSingleton();
-  }
 
-  public static StaticHolderSingleton getInstance() {
-    Debug.info("getInstance invoked.");
-    return InstanceHolder.INSTANCE;
-  }
+    static class InstanceHolder {
+        // 保存外部类的唯一实例
+        static {
+            Debug.info("InstanceHolder inited.");
+        }
 
-  public void someService() {
-    Debug.info("someService invoked.");
-    // 省略其他代码
-  }
+        final static StaticHolderSingleton INSTANCE = new StaticHolderSingleton();
+    }
 
-  public static void main(String[] args) {
-    Thread t = new Thread() {
-      @Override
-      public void run() {
-        Debug.info(StaticHolderSingleton.InstanceHolder.class.getName());
-        StaticHolderSingleton.InstanceHolder.INSTANCE.someService();
-      };
-    };
-    t.start();
-  }
+    public static StaticHolderSingleton getInstance() {
+        Debug.info("getInstance invoked.");
+        return InstanceHolder.INSTANCE;
+    }
+
+    public void someService() {
+        Debug.info("someService invoked.");
+        // 省略其他代码
+    }
+
+    public static void main(String[] args) {
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                Debug.info(StaticHolderSingleton.InstanceHolder.class.getName());
+                StaticHolderSingleton.InstanceHolder.INSTANCE.someService();
+            }
+
+            ;
+        };
+        t.start();
+    }
 }
