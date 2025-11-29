@@ -18,38 +18,49 @@ import io.github.viscent.mtia.util.Tools;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 清单 3-26
+ * static 关键字可见性保障示例
+ * <p>
+ * init 方法所启动的线程至少可以看到语句① ～语句③的
+ * 操作结果，即该线程总是可以看到 static 字段 taskConfig 的初始值 。 如果 in it 方法被执行
+ * 的时候（甚至是在此之前）其他线程执行了 changeConfig 方法 ，那么 init 方法中启动的线
+ * 程能否读取到 taskConfig 的相对新值也是没有保障的 。 这种情形下要保障可见性，我们仍
+ * 然需要借助其他的线程同步机制
+ */
 public class StaticVisibilityExample {
-  private static Map<String, String> taskConfig;
-  static {
-    Debug.info("The class being initialized...");
-    taskConfig = new HashMap<String, String>();// 语句①
-    taskConfig.put("url", "https://github.com/Viscent");// 语句②
-    taskConfig.put("timeout", "1000");// 语句③
-  }
+    private static Map<String, String> taskConfig;
 
-  public static void changeConfig(String url, int timeout) {
-    taskConfig = new HashMap<String, String>();// 语句④
-    taskConfig.put("url", url);// 语句⑤
-    taskConfig.put("timeout", String.valueOf(timeout));// 语句⑥
-  }
+    static {
+        Debug.info("The class being initialized...");
+        taskConfig = new HashMap<String, String>();// 语句①
+        taskConfig.put("url", "https://github.com/Viscent");// 语句②
+        taskConfig.put("timeout", "1000");// 语句③
+    }
 
-  public static void init() {
-    // 该线程至少能够看到语句①～语句③的操作结果，而能否看到语句④～语句⑥的操作结果是没有保障的。
-    Thread t = new Thread() {
-      @Override
-      public void run() {
-        String url = taskConfig.get("url");
-        String timeout = taskConfig.get("timeout");
-        doTask(url, Integer.valueOf(timeout));
-      }
-    };
-    t.start();
-  }
+    public static void changeConfig(String url, int timeout) {
+        taskConfig = new HashMap<String, String>();// 语句④
+        taskConfig.put("url", url);// 语句⑤
+        taskConfig.put("timeout", String.valueOf(timeout));// 语句⑥
+    }
 
-  private static void doTask(String url, int timeout) {
-    // 省略其他代码
+    public static void init() {
+        // 该线程至少能够看到语句①～语句③的操作结果，而能否看到语句④～语句⑥的操作结果是没有保障的。
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                String url = taskConfig.get("url");
+                String timeout = taskConfig.get("timeout");
+                doTask(url, Integer.valueOf(timeout));
+            }
+        };
+        t.start();
+    }
 
-    // 模拟实际操作的耗时
-    Tools.randomPause(500);
-  }
+    private static void doTask(String url, int timeout) {
+        // 省略其他代码
+
+        // 模拟实际操作的耗时
+        Tools.randomPause(500);
+    }
 }

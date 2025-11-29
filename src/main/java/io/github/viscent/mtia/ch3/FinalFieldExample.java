@@ -12,30 +12,38 @@ http://www.broadview.com.cn/31065
 */
 package io.github.viscent.mtia.ch3;
 
+/**
+ * 清单 3-27
+ * final 关键字的作用示例
+ * <p>
+ * 出一个对象被发布到其他线程的时候，该对象的所有 final 字段（实例变量）都是初
+ * 始化完毕的，即其他线程读取这些字段的时候所读取到的值都是相应字段的初始值（而不
+ * 是默认值）
+ */
 public class FinalFieldExample {
-  final int x;
-  int y;
-  static FinalFieldExample instance;
+    final int x;
+    int y;
+    static FinalFieldExample instance;
 
-  public FinalFieldExample() {
-    x = 1;
-    y = 2;
-  }
-
-  public static void writer() {
-    instance = new FinalFieldExample();
-  }
-
-  public static void reader() {
-    final FinalFieldExample theInstance = instance;
-    if (theInstance != null) {
-      int diff = theInstance.y - theInstance.x;
-      // diff的值可能为1(=2-1），也可能为-1（=0-1）。
-      print(diff);
+    public FinalFieldExample() {
+        x = 1;
+        y = 2;
     }
-  }
 
-  private static void print(int x) {
-    // ...
-  }
+    public static void writer() {
+        instance = new FinalFieldExample();
+    }
+
+    public static void reader() {
+        final FinalFieldExample theInstance = instance;
+        if (theInstance != null) {
+            int diff = theInstance.y - theInstance.x;
+            // diff的值可能为1(=2-1），也可能为-1（=0-1）。
+            print(diff);
+        }
+    }
+
+    private static void print(int x) {
+        // ...
+    }
 }
