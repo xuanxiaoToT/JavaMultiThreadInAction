@@ -14,45 +14,48 @@ package io.github.viscent.mtia.ch4.case02;
 
 /**
  * 日志记录集。 包含若干条日志记录。
+ * 清单 4-8
+ * <p>
+ * RecordSet 类作为日志统计处理线程和日志文件读取线程之间数据传递的容器 。
  *
  * @author Viscent Huang
  */
 public class RecordSet {
-  public final int capacity;
-  final String[] records;
-  int readIndex = 0;
-  int writeIndex = 0;
+    public final int capacity;
+    final String[] records;
+    int readIndex = 0;
+    int writeIndex = 0;
 
-  public RecordSet(int capacity) {
-    this.capacity = capacity;
-    records = new String[capacity];
-  }
-
-  public String nextRecord() {
-    String record = null;
-    if (readIndex < writeIndex) {
-      record = records[readIndex++];
+    public RecordSet(int capacity) {
+        this.capacity = capacity;
+        records = new String[capacity];
     }
-    return record;
-  }
 
-  public boolean putRecord(String line) {
-    if (writeIndex == capacity) {
-      return true;
+    public String nextRecord() {
+        String record = null;
+        if (readIndex < writeIndex) {
+            record = records[readIndex++];
+        }
+        return record;
     }
-    records[writeIndex++] = line;
-    return false;
-  }
 
-  public void reset() {
-    readIndex = 0;
-    writeIndex = 0;
-    for (int i = 0, len = records.length; i < len; i++) {
-      records[i] = null;
+    public boolean putRecord(String line) {
+        if (writeIndex == capacity) {
+            return true;
+        }
+        records[writeIndex++] = line;
+        return false;
     }
-  }
 
-  public boolean isEmpty() {
-    return 0 == writeIndex;
-  }
+    public void reset() {
+        readIndex = 0;
+        writeIndex = 0;
+        for (int i = 0, len = records.length; i < len; i++) {
+            records[i] = null;
+        }
+    }
+
+    public boolean isEmpty() {
+        return 0 == writeIndex;
+    }
 }
