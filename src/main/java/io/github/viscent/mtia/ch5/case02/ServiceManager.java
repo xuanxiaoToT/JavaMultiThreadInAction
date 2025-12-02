@@ -16,42 +16,45 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * 清单 5-5 ServiceManager 源码
+ */
 public class ServiceManager {
-  static volatile CountDownLatch latch;
-  static Set<Service> services;
+    static volatile CountDownLatch latch;
+    static Set<Service> services;
 
-  public static void startServices() {
-    services = getServices();
-    for (Service service : services) {
-      service.start();
-    }
-  }
-
-  public static boolean checkServiceStatus() {
-    boolean allIsOK = true;
-    // 等待服务启动结束
-    try {
-      latch.await();
-    } catch (InterruptedException e) {
-      return false;
+    public static void startServices() {
+        services = getServices();
+        for (Service service : services) {
+            service.start();
+        }
     }
 
-    for (Service service : services) {
-      if (!service.isStarted()) {
-        allIsOK = false;
-        break;
-      }
-    }
-    return allIsOK;
-  }
+    public static boolean checkServiceStatus() {
+        boolean allIsOK = true;
+        // 等待服务启动结束
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            return false;
+        }
 
-  static Set<Service> getServices() {
-    // 模拟实际代码
-    latch = new CountDownLatch(3);
-    HashSet<Service> servcies = new HashSet<Service>();
-    servcies.add(new SampleServiceC(latch));
-    servcies.add(new SampleServiceA(latch));
-    servcies.add(new SampleServiceB(latch));
-    return servcies;
-  }
+        for (Service service : services) {
+            if (!service.isStarted()) {
+                allIsOK = false;
+                break;
+            }
+        }
+        return allIsOK;
+    }
+
+    static Set<Service> getServices() {
+        // 模拟实际代码
+        latch = new CountDownLatch(3);
+        HashSet<Service> servcies = new HashSet<Service>();
+        servcies.add(new SampleServiceC(latch));
+        servcies.add(new SampleServiceA(latch));
+        servcies.add(new SampleServiceB(latch));
+        return servcies;
+    }
 }
