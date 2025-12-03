@@ -20,6 +20,13 @@ import java.util.concurrent.CyclicBarrier;
 
 /**
  * 清单 5-8 CyclicBarrie 使用示例
+ * <p>
+ * 该例子模拟了士兵参与打靶训练 。 所有参与训练的士兵（ Soldier)
+ * 被分为若干组（ Rank ），其中每组被称为一排 。 一排中士兵的个数等于靶子的个数 。 每次
+ * 只能够有一排士兵进行射击 。 一排中的士兵必须同时开始射击，并且射击完毕的士兵必须
+ * 等待同排的其他所有士兵射击完毕后才能够整排地撤离射击点 。 一排中的士兵射击结束后
+ * 腾出射击点和靶子，换另外一排中的士兵进行下一轮射击，如此交替进行，直到训练时间
+ * 结束
  */
 public class ShootPractice {
     // 参与打靶训练的全部士兵
@@ -32,7 +39,9 @@ public class ShootPractice {
     volatile boolean done = false;
     // 用来指示进行下一轮打靶的是哪一排的士兵
     volatile int nextLine = 0;
+    // shiftBarrier 用于实现当前排的士兵在该排所有士兵射击完毕后同时撤离打靶位置
     final CyclicBarrier shiftBarrier;
+    // startBarrier 用于实现当前排的士兵在同一时刻开始射击
     final CyclicBarrier startBarrier;
 
     public ShootPractice(int N, final int lineCount, int lasting) {
@@ -44,6 +53,7 @@ public class ShootPractice {
                 rank[i][j] = new Soldier(i * N + j);
             }
         }
+        // barrierAction 会被最后一个线程 执行CyclicBarrier.await 方法时执行，该任务执行结束后其他等待线程才会被唤醒 。
         shiftBarrier = new CyclicBarrier(N, new Runnable() {
             @Override
             public void run() {
@@ -54,11 +64,6 @@ public class ShootPractice {
         });
         // 语句②
         startBarrier = new CyclicBarrier(N);
-    }
-
-    public static void main(String[] args) throws InterruptedException {
-        ShootPractice sp = new ShootPractice(4, 5, 24);
-        sp.start();
     }
 
     public void start() throws InterruptedException {
@@ -130,4 +135,10 @@ public class ShootPractice {
         }
 
     }// 类Soldier定义结束
+
+
+    public static void main(String[] args) throws InterruptedException {
+        ShootPractice sp = new ShootPractice(4, 5, 24);
+        sp.start();
+    }
 }

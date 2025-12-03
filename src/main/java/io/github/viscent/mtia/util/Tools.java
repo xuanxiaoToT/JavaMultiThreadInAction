@@ -63,6 +63,9 @@ public final class Tools {
         }
     }
 
+    /**
+     * 清单 5-16 捕获 Interrupted Exception 后恢复中断标志
+     */
     public static void randomPause(int maxPauseTime) {
         int sleepTime = rnd.nextInt(maxPauseTime);
         try {

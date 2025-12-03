@@ -20,6 +20,8 @@ import java.util.concurrent.BlockingQueue;
  * 日志读取线程实现类
  * 清单 4-10
  *
+ * 清单 5-9 生产者一消费者实例
+ *
  * @author Viscent Huang
  */
 public class LogReaderThread extends AbstractLogReader {

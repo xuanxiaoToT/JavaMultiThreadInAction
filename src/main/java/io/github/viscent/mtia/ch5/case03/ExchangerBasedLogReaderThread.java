@@ -18,35 +18,42 @@ import io.github.viscent.mtia.ch4.case02.RecordSet;
 import java.io.InputStream;
 import java.util.concurrent.Exchanger;
 
+/**
+ * 清单 5-13 使用 Exchanger 作为传输通道实例
+ *
+ * 从双缓冲的角度来看， ExchangerBasedLogReaderThread 内部维护了两个类型为
+ * RecordSet （参见清单 4-8 ）的缓冲区 nextToFill 和 consumedBatch ，前者表示待填充的缓冲
+ * 区，后者表示填充后已被“消费”过的缓冲区
+ */
 public class ExchangerBasedLogReaderThread extends AbstractLogReader {
-  private final Exchanger<RecordSet> exchanger;
-  private volatile RecordSet nextToFill;
-  private RecordSet consumedBatch;
+    private final Exchanger<RecordSet> exchanger;
+    private volatile RecordSet nextToFill;
+    private RecordSet consumedBatch;
 
-  public ExchangerBasedLogReaderThread(InputStream in, int inputBufferSize,
-      int batchSize) {
-    super(in, inputBufferSize, batchSize);
-    exchanger = new Exchanger<RecordSet>();
-    nextToFill = new RecordSet(batchSize);
-    consumedBatch = new RecordSet(batchSize);
-  }
-
-  @Override
-  protected RecordSet getNextToFill() {
-    return nextToFill;
-  }
-
-  @Override
-  protected void publish(RecordSet recordSet) throws InterruptedException {
-    nextToFill = exchanger.exchange(recordSet);
-  }
-
-  @Override
-  protected RecordSet nextBatch() throws InterruptedException {
-    consumedBatch = exchanger.exchange(consumedBatch);
-    if (consumedBatch.isEmpty()) {
-      consumedBatch = null;
+    public ExchangerBasedLogReaderThread(InputStream in, int inputBufferSize,
+                                         int batchSize) {
+        super(in, inputBufferSize, batchSize);
+        exchanger = new Exchanger<RecordSet>();
+        nextToFill = new RecordSet(batchSize);
+        consumedBatch = new RecordSet(batchSize);
     }
-    return consumedBatch;
-  }
+
+    @Override
+    protected RecordSet getNextToFill() {
+        return nextToFill;
+    }
+
+    @Override
+    protected void publish(RecordSet recordSet) throws InterruptedException {
+        nextToFill = exchanger.exchange(recordSet);
+    }
+
+    @Override
+    protected RecordSet nextBatch() throws InterruptedException {
+        consumedBatch = exchanger.exchange(consumedBatch);
+        if (consumedBatch.isEmpty()) {
+            consumedBatch = null;
+        }
+        return consumedBatch;
+    }
 }
