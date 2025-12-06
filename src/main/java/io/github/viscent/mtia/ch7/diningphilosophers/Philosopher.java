@@ -13,9 +13,9 @@ http://www.broadview.com.cn/31065
 package io.github.viscent.mtia.ch7.diningphilosophers;
 
 public interface Philosopher {
-  void think();
+    void think();
 
-  void eat();
+    void eat();
 
-  void start();
+    void start();
 }

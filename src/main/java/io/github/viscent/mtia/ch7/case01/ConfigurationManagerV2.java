@@ -18,43 +18,47 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * 清单 7-13 使用开放调用改造 ConfigurationManager
+ */
 public enum ConfigurationManagerV2 {
-  INSTANCE;
-  protected final Set<ConfigEventListener> listeners;
-  {
-    listeners = new CopyOnWriteArraySet<ConfigEventListener>();
-  }
+    INSTANCE;
+    protected final Set<ConfigEventListener> listeners;
 
-  public Configuration load(String name) {
-    Configuration cfg = loadConfigurationFromDB(name);
-    for (ConfigEventListener listener : listeners) {
-      listener.onConfigLoaded(cfg);
+    {
+        listeners = new CopyOnWriteArraySet<ConfigEventListener>();
     }
-    return cfg;
-  }
 
-  private Configuration loadConfigurationFromDB(String name) {
-    // 模拟从数据库加载配置数据
-    Tools.randomPause(50);
-    Configuration cfg = new Configuration(name, 0);
-    cfg.setProperty("url", "https://github.com/Viscent");
-    cfg.setProperty("connectTimeout", "2000");
-    cfg.setProperty("readTimeout", "2000");
-    return cfg;
-  }
-
-  public void registerListener(ConfigEventListener listener) {
-    listeners.add(listener);
-  }
-
-  public void removeListener(ConfigEventListener listener) {
-    listeners.remove(listener);
-  }
-
-  public void update(String name, int newVersion,
-      Map<String, String> properties) {
-    for (ConfigEventListener listener : listeners) {
-      listener.onConfigUpdated(name, newVersion, properties);
+    public Configuration load(String name) {
+        Configuration cfg = loadConfigurationFromDB(name);
+        for (ConfigEventListener listener : listeners) {
+            listener.onConfigLoaded(cfg);
+        }
+        return cfg;
     }
-  }
+
+    private Configuration loadConfigurationFromDB(String name) {
+        // 模拟从数据库加载配置数据
+        Tools.randomPause(50);
+        Configuration cfg = new Configuration(name, 0);
+        cfg.setProperty("url", "https://github.com/Viscent");
+        cfg.setProperty("connectTimeout", "2000");
+        cfg.setProperty("readTimeout", "2000");
+        return cfg;
+    }
+
+    public void registerListener(ConfigEventListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(ConfigEventListener listener) {
+        listeners.remove(listener);
+    }
+
+    // 不再加锁，该用线程安全的集合。
+    public void update(String name, int newVersion, Map<String, String> properties) {
+        for (ConfigEventListener listener : listeners) {
+            listener.onConfigUpdated(name, newVersion, properties);
+        }
+    }
 }

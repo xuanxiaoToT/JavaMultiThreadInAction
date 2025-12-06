@@ -12,32 +12,31 @@ http://www.broadview.com.cn/31065
 */
 package io.github.viscent.mtia.ch6;
 
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-
+/**
+ * 清单 6-11 使用 Filter 规避 ThreadLocal 内存泄漏示例代码
+ * <p>
+ * Filter.doFilter 方法的执行线程与 Servlet 的执行线程（即Servlet.service 方法的执行线程）是同一个线程
+ */
 @WebFilter("/memoryLeak")
 public class ThreadLocalCleanupFilter implements Filter {
-  @Override
-  public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-      throws IOException, ServletException {
-    chain.doFilter(request, response);
-    ThreadLocalMemoryLeak.counterHolder.remove();
-  }
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        chain.doFilter(request, response);
+        ThreadLocalMemoryLeak.counterHolder.remove();
+    }
 
-  @Override
-  public void init(FilterConfig fConfig) throws ServletException {
-    // 什么也不做
-  }
+    @Override
+    public void init(FilterConfig fConfig) throws ServletException {
+        // 什么也不做
+    }
 
-  @Override
-  public void destroy() {
-    // 什么也不做
-  }
+    @Override
+    public void destroy() {
+        // 什么也不做
+    }
 }

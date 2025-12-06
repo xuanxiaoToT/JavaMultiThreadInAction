@@ -17,33 +17,38 @@ import io.github.viscent.mtia.util.ReadOnlyIterator;
 import java.util.Iterator;
 import java.util.Set;
 
+/**
+ * 清单 3-13
+ * <p>
+ * 一个不可变对象
+ */
 public final class Candidate implements Iterable<Endpoint> {
-  // 下游部件节点列表
-  private final Set<Endpoint> endpoints;
-  // 下游部件节点的总权重
-  public final int totalWeight;
+    // 下游部件节点的总权重
+    public final int totalWeight;
+    // 下游部件节点列表
+    private final Set<Endpoint> endpoints;
 
-  public Candidate(Set<Endpoint> endpoints) {
-    int sum = 0;
-    for (Endpoint endpoint : endpoints) {
-      sum += endpoint.weight;
+    public Candidate(Set<Endpoint> endpoints) {
+        int sum = 0;
+        for (Endpoint endpoint : endpoints) {
+            sum += endpoint.weight;
+        }
+        this.totalWeight = sum;
+        this.endpoints = endpoints;
     }
-    this.totalWeight = sum;
-    this.endpoints = endpoints;
-  }
 
-  public int getEndpointCount() {
-    return endpoints.size();
-  }
+    public int getEndpointCount() {
+        return endpoints.size();
+    }
 
-  @Override
-  public final Iterator<Endpoint> iterator() {
-    return ReadOnlyIterator.with(endpoints.iterator());
-  }
+    @Override
+    public final Iterator<Endpoint> iterator() {
+        return ReadOnlyIterator.with(endpoints.iterator());
+    }
 
-  @Override
-  public String toString() {
-    return "Candidate [endpoints=" + endpoints + ", totalWeight=" + totalWeight
-        + "]";
-  }
+    @Override
+    public String toString() {
+        return "Candidate [endpoints=" + endpoints + ", totalWeight=" + totalWeight
+                + "]";
+    }
 }

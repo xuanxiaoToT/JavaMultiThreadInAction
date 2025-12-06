@@ -15,54 +15,62 @@ package io.github.viscent.mtia.ch6.so;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BrokenStatelessObject {
-  public String doSomething(String s) {
-    UnsafeSingleton us = UnsafeSingleton.INSTANCE;
-    int i = us.doSomething(s);
-    UnsafeStatefullObject sfo = new UnsafeStatefullObject();
-    String str = sfo.doSomething(s, i);
-    return str;
-  }
+/**
+ * 清单 6-4 多个线程访问本身不包含状态的对象也可能存在共享状态示例
+ * <p>
+ * 尽管 BrokenStatelessObject 类自身不包含任何 实 例 变量或者静态变量，但是
+ * BrokenStatelessObject.doSomething 方法的多个执行线程仍 然可能存在共享状态
+ */
+enum UnsafeSingleton {
+    INSTANCE;
 
-  public String doSomething1(String s) {
-    UnsafeSingleton us = UnsafeSingleton.INSTANCE;
-    UnsafeStatefullObject sfo = new UnsafeStatefullObject();
-    String str;
-    synchronized (this) {
-      str = sfo.doSomething(s, us.doSomething(s));
+    // 会成为共享状态
+    public int state1;
+
+    public int doSomething(String s) {
+        // 省略其他代码
+
+        // 访问state1
+        return 0;
     }
-    return str;
-  }
+}
+
+public class BrokenStatelessObject {
+    public String doSomething(String s) {
+        // 非线程安全单例类
+        UnsafeSingleton us = UnsafeSingleton.INSTANCE;
+        int i = us.doSomething(s);
+        UnsafeStatefullObject sfo = new UnsafeStatefullObject();
+        String str = sfo.doSomething(s, i);
+        return str;
+    }
+
+    public String doSomething1(String s) {
+        UnsafeSingleton us = UnsafeSingleton.INSTANCE;
+        UnsafeStatefullObject sfo = new UnsafeStatefullObject();
+        String str;
+        synchronized (this) {
+            str = sfo.doSomething(s, us.doSomething(s));
+        }
+        return str;
+    }
 }
 
 class UnsafeStatefullObject {
-  static Map<String, String> cache = new HashMap<String, String>();
+    static Map<String, String> cache = new HashMap<String, String>();
 
-  public String doSomething(String s, int len) {
-    String result = cache.get(s);
-    if (null == result) {
-      result = md5sum(result, len);
-      cache.put(s, result);
+    public String doSomething(String s, int len) {
+        String result = cache.get(s);
+        if (null == result) {
+            result = md5sum(result, len);
+            cache.put(s, result);
+        }
+        return result;
     }
-    return result;
-  }
 
-  public String md5sum(String s, int len) {
-    // 生成md5摘要
-    // 省略其他代码
-    return s;
-  }
-}
-
-enum UnsafeSingleton {
-  INSTANCE;
-
-  public int state1;
-
-  public int doSomething(String s) {
-    // 省略其他代码
-
-    // 访问state1
-    return 0;
-  }
+    public String md5sum(String s, int len) {
+        // 生成md5摘要
+        // 省略其他代码
+        return s;
+    }
 }

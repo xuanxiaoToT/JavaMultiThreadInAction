@@ -14,24 +14,28 @@ package io.github.viscent.mtia.ch7.diningphilosophers;
 
 import io.github.viscent.mtia.util.Debug;
 
+/**
+ * 清单 7-6 使用粗粒度的锁规避死锁
+ */
 public class GlobalLckBasedPhilosopher extends AbstractPhilosopher {
-  // GLOBAL_LOCK必须使用static修饰
-  private final static Object GLOBAL_LOCK = new Object();
-  public GlobalLckBasedPhilosopher(int id, Chopstick left,
-      Chopstick right) {
-    super(id, left, right);
-  }
+    // GLOBAL_LOCK必须使用static修饰
+    private final static Object GLOBAL_LOCK = new Object();
 
-  @Override
-  public void eat() {
-    synchronized (GLOBAL_LOCK) {
-      Debug.info("%s is picking up %s on his left...%n", this, left);
-      left.pickUp();
-      Debug.info("%s is picking up %s on his right...%n", this, right);
-      right.pickUp();
-      doEat();
-      right.putDown();
-      left.putDown();
+    public GlobalLckBasedPhilosopher(int id, Chopstick left,
+                                     Chopstick right) {
+        super(id, left, right);
     }
-  }// eat方法结束
+
+    @Override
+    public void eat() {
+        synchronized (GLOBAL_LOCK) {
+            Debug.info("%s is picking up %s on his left...%n", this, left);
+            left.pickUp();
+            Debug.info("%s is picking up %s on his right...%n", this, right);
+            right.pickUp();
+            doEat();
+            right.putDown();
+            left.putDown();
+        }
+    }// eat方法结束
 }
