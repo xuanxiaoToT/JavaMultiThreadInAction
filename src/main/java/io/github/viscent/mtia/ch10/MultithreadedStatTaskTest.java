@@ -12,22 +12,20 @@ http://www.broadview.com.cn/31065
 */
 package io.github.viscent.mtia.ch10;
 
-import static org.junit.Assert.assertTrue;
-
-import io.github.viscent.mtia.ch4.case02.AbstractLogReader;
-import io.github.viscent.mtia.ch4.case02.DelayItem;
-import io.github.viscent.mtia.ch4.case02.MultithreadedStatTask;
-import io.github.viscent.mtia.ch4.case02.RecordSet;
-import io.github.viscent.mtia.ch4.case02.StatProcessor;
+import io.github.viscent.mtia.ch4.case02.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collections;
 import java.util.Map;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
+/*
+ * 清单 10-2 MultithreadedStatTask 单元测试 JU nit j原码
+ **/
 public class MultithreadedStatTaskTest {
     private MultithreadedStatTask mst;
     private int recordCount = 0;

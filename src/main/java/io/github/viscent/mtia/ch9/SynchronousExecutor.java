@@ -14,9 +14,12 @@ package io.github.viscent.mtia.ch9;
 
 import java.util.concurrent.Executor;
 
+/**
+ * 清单 9-1 使用 Executor 接口实现任务的同步执行
+ */
 public class SynchronousExecutor implements Executor {
-	@Override
-	public void execute(Runnable command) {
-		command.run();
-	}
+    @Override
+    public void execute(Runnable command) {
+        command.run();
+    }
 }

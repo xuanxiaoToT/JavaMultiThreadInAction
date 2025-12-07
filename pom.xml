@@ -21,10 +21,11 @@
     </build>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.elastisys.scale/commons.net -->
+        <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
         <dependency>
-            <groupId>com.elastisys.scale</groupId>
-            <artifactId>commons.net</artifactId>
-            <version>2.3.2</version>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.11.0</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
